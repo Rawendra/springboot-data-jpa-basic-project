@@ -14,5 +14,6 @@ public class CourseResponse {
     private Long courseId;
     private String title;
     private Integer credit;
+    private CourseMaterialResponse courseMaterialResponse;
 
 }

@@ -60,11 +60,35 @@ public class CourseServiceImpl implements CourseService {
             }
             courseMaterialResponse = CourseMaterialResponse.builder().
                     courseMaterialTopic(courseMaterialOptional.get().getCourseMaterialTopic())
-                    .courseRequest(courseResponse).
+                    .course(courseResponse).
                     courseMaterialId(courseMaterialOptional.get().getCourseMaterialId())
                     .build();
         }
 
         return courseMaterialResponse;
+    }
+
+    @Override
+    public CourseResponse getCourseDetails(Long courseId) {
+
+        CourseResponse response = null;
+        Optional<Course> courseOptional = courseRepository.findById(courseId);
+
+        if (courseOptional.isPresent()) {
+
+            CourseMaterial courseMaterial = courseOptional.get().getCourseMaterial();
+            CourseMaterialResponse courseMaterialResponse = CourseMaterialResponse.builder().
+                    courseMaterialTopic(courseMaterial.getCourseMaterialTopic()).
+                    courseMaterialId(courseMaterial.getCourseMaterialId())
+                    .url(courseMaterial.getUrl()).
+                    build();
+
+            response = CourseResponse.builder()
+                    .title(courseOptional.get().getTitle())
+                    .courseId(courseOptional.get().getCourseId()).credit(courseOptional.get().getCredit())
+                    .courseMaterialResponse(courseMaterialResponse)
+                    .build();
+        }
+        return response;
     }
 }

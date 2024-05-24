@@ -14,4 +14,5 @@ public class CourseMaterialRequest {
     private String courseMaterialTopic;
     private String url;
     private CourseRequest courseRequest;
+
 }

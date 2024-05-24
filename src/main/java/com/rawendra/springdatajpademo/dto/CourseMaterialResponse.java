@@ -13,5 +13,5 @@ public class CourseMaterialResponse {
     private Long courseMaterialId;
     private String courseMaterialTopic;
     private String url;
-    private CourseResponse courseRequest;
+    private CourseResponse course;
 }
