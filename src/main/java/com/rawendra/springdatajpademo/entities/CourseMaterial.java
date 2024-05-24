@@ -2,16 +2,14 @@ package com.rawendra.springdatajpademo.entities;
 
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 @Entity
+@ToString(exclude = "course")
 public class CourseMaterial {
 
     @Id
@@ -22,7 +20,7 @@ public class CourseMaterial {
     private Long courseMaterialId;
     private String courseMaterialTopic;
     private String url;
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "courseId", referencedColumnName = "courseId")
     private Course course;
 
