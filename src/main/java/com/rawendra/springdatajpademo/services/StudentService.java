@@ -52,7 +52,18 @@ public class StudentService {
 
     }
 
-    public StudentResponse findByStudentId(Long id){
+    public StudentResponse findByStudentId(Long id) {
         return studentEntityToResponse(studentRepository.findByStudentId(id));
     }
+
+    public StudentResponse findByStudentEmailId(String email) {
+        return studentEntityToResponse(studentRepository.getStudentDetailsByEmailId(email));
+    }
+
+    public int updateStudenNameForEmailId(String name, String email){
+        return studentRepository.updateStudentByEmailId(name,email);
+    }
+
+
+
 }

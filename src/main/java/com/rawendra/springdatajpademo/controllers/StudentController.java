@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RequiredArgsConstructor
-@RestController()
+@RestController
 @RequestMapping("/api/students")
 public class StudentController {
 
@@ -32,8 +32,21 @@ public class StudentController {
     public List<StudentResponse> getStudentByName(@PathVariable String name) {
         return studentService.getStudentByName(name);
     }
+
     @GetMapping("/id/{id}")
-    public StudentResponse  findByStudentId(@PathVariable Long id) {
+    public StudentResponse findByStudentId(@PathVariable Long id) {
         return studentService.findByStudentId(id);
+    }
+
+    @GetMapping("/email/{email}")
+    public StudentResponse getStudentByEmailId(@PathVariable String email) {
+
+        return studentService.findByStudentEmailId(email);
+    }
+
+
+    @GetMapping("/update/name/{name}/email/{email}")
+    public int findByStudentNamesByGaurdianName(@PathVariable String name, @PathVariable String email) {
+        return studentService.updateStudenNameForEmailId(name, email);
     }
 }
