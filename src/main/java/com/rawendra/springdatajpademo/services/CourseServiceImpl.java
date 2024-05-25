@@ -17,78 +17,96 @@ import java.util.Optional;
 @Service
 public class CourseServiceImpl implements CourseService {
 
-    @Autowired
-    private CourseRepository courseRepository;
+  @Autowired
+  private CourseRepository courseRepository;
 
-    @Autowired
-    private CourseMaterialRepository courseMaterialRepository;
+  @Autowired
+  private CourseMaterialRepository courseMaterialRepository;
 
-    @Override
-    public void addCourseDetails(CourseMaterialRequest courseMaterialRequest) {
+  @Override
+  public void addCourseDetails(CourseMaterialRequest courseMaterialRequest) {
 
-        CourseRequest courseRequest = courseMaterialRequest.getCourseRequest();
+    CourseRequest courseRequest = courseMaterialRequest.getCourseRequest();
 
-        Course courseEntity = Course.builder().title(courseRequest.getTitle())
-                .credit(courseRequest.getCredit())
+    Course courseEntity = Course.builder().title(courseRequest.getTitle())
+            .credit(courseRequest.getCredit())
+            .build();
+
+    CourseMaterial courseMaterialEntity = CourseMaterial.builder()
+            .courseMaterialId(courseMaterialRequest.getCourseMaterialId())
+            .courseMaterialTopic(courseMaterialRequest.getCourseMaterialTopic())
+            .url(courseMaterialRequest.getUrl())
+            .course(courseEntity)
+            .build();
+    courseMaterialRepository.save(courseMaterialEntity);
+
+  }
+
+  @Override
+  public CourseMaterialResponse getCourseMaterialDetails(Long courseMaterialId) {
+    Optional<CourseMaterial> courseMaterialOptional = courseMaterialRepository.findById(courseMaterialId);
+    CourseMaterialResponse courseMaterialResponse = null;
+    if (courseMaterialOptional.isPresent()) {
+      System.out.println(courseMaterialOptional.get());
+      Course course = courseMaterialOptional.get().getCourse();
+
+      CourseResponse courseResponse = null;
+      if (course != null) {
+        courseResponse = CourseResponse.builder().
+                courseId(course.getCourseId())
+                .credit(course.getCredit())
+                .title(course.getTitle())
                 .build();
-
-        CourseMaterial courseMaterialEntity = CourseMaterial.builder()
-                .courseMaterialId(courseMaterialRequest.getCourseMaterialId())
-                .courseMaterialTopic(courseMaterialRequest.getCourseMaterialTopic())
-                .url(courseMaterialRequest.getUrl())
-                .course(courseEntity)
-                .build();
-        courseMaterialRepository.save(courseMaterialEntity);
-
+      }
+      courseMaterialResponse = CourseMaterialResponse.builder().
+              courseMaterialTopic(courseMaterialOptional.get().getCourseMaterialTopic())
+              .course(courseResponse).
+              courseMaterialId(courseMaterialOptional.get().getCourseMaterialId())
+              .build();
     }
 
-    @Override
-    public CourseMaterialResponse getCourseMaterialDetails(Long courseMaterialId) {
-        Optional<CourseMaterial> courseMaterialOptional = courseMaterialRepository.findById(courseMaterialId);
-        CourseMaterialResponse courseMaterialResponse = null;
-        if (courseMaterialOptional.isPresent()) {
-            System.out.println(courseMaterialOptional.get());
-            Course course = courseMaterialOptional.get().getCourse();
+    return courseMaterialResponse;
+  }
 
-            CourseResponse courseResponse = null;
-            if (course != null) {
-                courseResponse = CourseResponse.builder().
-                        courseId(course.getCourseId())
-                        .credit(course.getCredit())
-                        .title(course.getTitle())
-                        .build();
-            }
-            courseMaterialResponse = CourseMaterialResponse.builder().
-                    courseMaterialTopic(courseMaterialOptional.get().getCourseMaterialTopic())
-                    .course(courseResponse).
-                    courseMaterialId(courseMaterialOptional.get().getCourseMaterialId())
-                    .build();
-        }
+  @Override
+  public CourseResponse getCourseDetails(Long courseId) {
 
-        return courseMaterialResponse;
+    CourseResponse response = null;
+    Optional<Course> courseOptional = courseRepository.findById(courseId);
+
+    if (courseOptional.isPresent()) {
+
+      CourseMaterial courseMaterial = courseOptional.get().getCourseMaterial();
+      CourseMaterialResponse courseMaterialResponse = CourseMaterialResponse.builder().
+              courseMaterialTopic(courseMaterial.getCourseMaterialTopic()).
+              courseMaterialId(courseMaterial.getCourseMaterialId())
+              .url(courseMaterial.getUrl()).
+              build();
+
+      response = CourseResponse.builder()
+              .title(courseOptional.get().getTitle())
+              .courseId(courseOptional.get().getCourseId()).credit(courseOptional.get().getCredit())
+              .courseMaterialResponse(courseMaterialResponse)
+              .build();
     }
+    return response;
+  }
 
-    @Override
-    public CourseResponse getCourseDetails(Long courseId) {
+  @Override
+  public void addCourseDetailsWithCourseRequest(CourseRequest courseRequest) {
 
-        CourseResponse response = null;
-        Optional<Course> courseOptional = courseRepository.findById(courseId);
 
-        if (courseOptional.isPresent()) {
 
-            CourseMaterial courseMaterial = courseOptional.get().getCourseMaterial();
-            CourseMaterialResponse courseMaterialResponse = CourseMaterialResponse.builder().
-                    courseMaterialTopic(courseMaterial.getCourseMaterialTopic()).
-                    courseMaterialId(courseMaterial.getCourseMaterialId())
-                    .url(courseMaterial.getUrl()).
-                    build();
-
-            response = CourseResponse.builder()
-                    .title(courseOptional.get().getTitle())
-                    .courseId(courseOptional.get().getCourseId()).credit(courseOptional.get().getCredit())
-                    .courseMaterialResponse(courseMaterialResponse)
-                    .build();
-        }
-        return response;
-    }
+    Course course = Course.builder().
+            credit(courseRequest.getCredit()).title(courseRequest.getTitle())
+            .build();
+    CourseMaterial courseMaterial = CourseMaterial.builder().
+            courseMaterialTopic(courseRequest.getCourseMaterial().getCourseMaterialTopic())
+            .url(courseRequest.getCourseMaterial().getUrl())
+            .course(course)
+            .build();
+    //courseRepository.save(course);
+      courseMaterialRepository.save(courseMaterial);
+    ;
+  }
 }

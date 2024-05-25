@@ -1,22 +1,20 @@
 package com.rawendra.springdatajpademo.dto;
 
 import com.rawendra.springdatajpademo.entities.CourseMaterial;
-import jakarta.persistence.Entity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
 
 @Data
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class CourseRequest {
+@Builder
 
-    private Long courseId;
-    private String title;
-    private Integer credit;
-    private CourseMaterialRequest courseMaterial;
-
+public class TeacherRequest {
+  private String firstName;
+  private String lastName;
+  private List<CourseMaterialRequest> courseMaterials;
 }
