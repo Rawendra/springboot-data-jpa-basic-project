@@ -7,6 +7,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Entity
 @Data
 @AllArgsConstructor
@@ -24,6 +26,16 @@ public class StudentEntity {
     private String emailId;
     @Embedded
     private Guardian guardian;
+
+    @ManyToMany
+    @JoinTable(name = "student_course_map",
+            inverseJoinColumns = @JoinColumn(name = "course_id", referencedColumnName = "courseId"),
+            joinColumns = @JoinColumn(name = "student_id", referencedColumnName = "studentId")
+
+    )
+    private List<Course> courses;
+
+
 
 
 

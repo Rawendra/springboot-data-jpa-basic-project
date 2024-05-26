@@ -42,6 +42,11 @@ public class CourseServiceImpl implements CourseService {
 
   }
 
+
+  public void dosomething() {
+
+  }
+
   @Override
   public CourseMaterialResponse getCourseMaterialDetails(Long courseMaterialId) {
     Optional<CourseMaterial> courseMaterialOptional = courseMaterialRepository.findById(courseMaterialId);
@@ -96,7 +101,6 @@ public class CourseServiceImpl implements CourseService {
   public void addCourseDetailsWithCourseRequest(CourseRequest courseRequest) {
 
 
-
     Course course = Course.builder().
             credit(courseRequest.getCredit()).title(courseRequest.getTitle())
             .build();
@@ -106,7 +110,8 @@ public class CourseServiceImpl implements CourseService {
             .course(course)
             .build();
     //courseRepository.save(course);
-      courseMaterialRepository.save(courseMaterial);
+
+    courseMaterialRepository.save(courseMaterial);
     ;
   }
 }

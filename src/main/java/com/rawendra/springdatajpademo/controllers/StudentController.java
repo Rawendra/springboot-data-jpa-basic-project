@@ -1,6 +1,7 @@
 package com.rawendra.springdatajpademo.controllers;
 
 
+import com.rawendra.springdatajpademo.dto.StudentCourseUpdateRequest;
 import com.rawendra.springdatajpademo.dto.StudentRequest;
 import com.rawendra.springdatajpademo.dto.StudentResponse;
 import com.rawendra.springdatajpademo.entities.StudentEntity;
@@ -48,5 +49,11 @@ public class StudentController {
     @GetMapping("/update/name/{name}/email/{email}")
     public int findByStudentNamesByGaurdianName(@PathVariable String name, @PathVariable String email) {
         return studentService.updateStudenNameForEmailId(name, email);
+    }
+
+    @PostMapping("/update/courses")
+    public void updateStudentCourses( @RequestBody  StudentCourseUpdateRequest studentCourseUpdateRequest) throws Exception{
+
+        studentService.studentCourseUpdateRequest(studentCourseUpdateRequest);
     }
 }

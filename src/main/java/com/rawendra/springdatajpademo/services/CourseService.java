@@ -14,6 +14,8 @@ public interface CourseService {
 
     void addCourseDetails(CourseMaterialRequest courseMaterialRequest);
 
+    void dosomething();
+
 
     public CourseMaterialResponse getCourseMaterialDetails(Long courseMaterialId);
 
